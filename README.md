@@ -27,13 +27,33 @@ dotnet tool install bottlenoselabs.c2cs.tool --global
 1. Download and install [.NET 7](https://dotnet.microsoft.com/download).
 2. Fork the repository using GitHub or clone the repository manually with submodules: `git clone --recurse-submodules https://github.com/clibequilibrium/Tracy-CSharp`.
 3. Build the native library by running `library.sh`. To execute `.sh` scripts on Windows, use Git Bash which can be installed with Git itself: https://git-scm.com/download/win. The `library.sh` script requires that CMake is installed and in your path.
-4. Locate the sample of the C# project: `./src/cs/samples/HelloWorld/HelloWorld.csproj`.
+4. Install `C2CS` and `CAstFfi` from dotnet CLI
+```
+dotnet tool install --global bottlenoselabs.C2CS.Tool
+dotnet tool install --global bottlenoselabs.CAstFfi.Tool
+dotnet tool install --global bottlenoselabs.c2ffi.tool
+```
+5. Configure Tracy's macros, extract Tracy AST, and regenerate C# bindings.
+```bash
+cd bindgen
+./extract.sh
+./merge.sh
+./generate.sh
+``` 
+6. Locate the sample of the C# project: `./src/cs/samples/HelloWorld/HelloWorld.csproj`.
 
 ## Developers: Documentation
 
 For more information on how C# bindings work, see [`C2CS`](https://github.com/lithiumtoast/c2cs), the tool that generates the bindings for `Tracy` and other C libraries.
 
 To learn how to use `Tracy`, check out the [official readme](https://github.com/wolfpld/tracy).
+
+To build tracy-profiler
+```
+cd ext/Tracy
+cmake -B profiler/build -S profiler -DCMAKE_BUILD_TYPE=Release -DTRACY_FIBERS=ON
+cmake --build profiler/build --parallel --config Release
+```
 
 ## License
 
